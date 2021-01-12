@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil{% endblock %}
+
+{% block body %}
+
+<h1>MON PROFIL</h1>
+
+{% for article in articles %}
+
+    {#<p>{{ article.title }} - {{ article.content }}</p><br>#}
+
+    <a href="{{ path("id_article", {"id" : article.id}) }}">{{ article.title }} - {{ article.content }}</a><br>
+
+{% endfor %}
+
+{% endblock %}

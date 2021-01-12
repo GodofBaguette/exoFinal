@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Article;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -9,12 +10,18 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/article", name="article")
+     * @Route("/idarticle/{id}", name="id_article")
      */
-    public function index(): Response
+    public function index(int $id): Response
     {
+        $article = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->find($id);
+        
+
         return $this->render('article/index.html.twig', [
-            'controller_name' => 'ArticleController',
+            'articleTitle' => $article->getTitle(),
+            'articleContent' => $article->getContent(),
         ]);
     }
 }
