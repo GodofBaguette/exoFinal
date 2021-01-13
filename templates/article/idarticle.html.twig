@@ -8,10 +8,11 @@
 
 {% for article in articles %}
 
-    {#<p>{{ article.title }} - {{ article.content }}</p><br>#}
-
     <a href="{{ path("id_article", {"id" : article.id}) }}">{{ article.title }} - {{ article.content }}</a><br>
 
 {% endfor %}
+
+<br>
+<a href="{{ path("manage", {"name" : user.email}) }}">Modifier profil</a>
 
 {% endblock %}

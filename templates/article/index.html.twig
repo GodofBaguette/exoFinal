@@ -5,5 +5,10 @@
 {% block body %}
 <h1>My article :</h1><br>
 <p>{{ articleTitle }}</p><br>
-<p>{{ articleContent }}</p>
+<p>{{ articleContent }}</p><br>
+
+<a href="{{ path("delete", {"id" : articleId}) }}">DELETE </a>
+
+<a href="{{ path("update", {"id" : articleId}) }}"> UPDATE</a>
+
 {% endblock %}

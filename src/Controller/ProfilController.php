@@ -3,10 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use App\Entity\User;
+use App\Form\ArticleType;
+use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ProfilController extends AbstractController
 {
@@ -22,28 +27,90 @@ class ProfilController extends AbstractController
 
         return $this->render('article/idarticle.html.twig', [
             'articles' => $article,
+            'user' => $user,
         ]);
     }
 
     /**
-     * @Route("/product/update/{id}", name="update")
+     * @Route("/idarticle/delete/{id}", name="delete")
      */
-    public function update(int $id): Response
+    public function delete(int $id): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $product = $entityManager->getRepository(Article::class)->find($id);
+        
+        $article = $entityManager->getRepository(Article::class)->find($id);
+        
 
-        if (!$product) {
+        $entityManager->remove($article);
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('profil', [
+            'name' => $this->getUser()->getUsername()
+        ]);
+    }
+
+    /**
+     * @Route("/idarticle/update/{id}", name="update")
+     */
+    public function update(Request $request, int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $article = $entityManager->getRepository(Article::class)->find($id);
+        
+        if (!$article) {
             throw $this->createNotFoundException(
                 'No product found for id '.$id
             );
         }
 
-        $product->setName('New product name!');
-        $entityManager->flush();
+        $form = $this->createForm(ArticleType::class, $article);
 
-        return $this->redirectToRoute('id_article', [
-            'id' => $product->getId()
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($article);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('profil', [
+                'name' => $this->getUser()->getUsername()
+            ]);
+        }
+
+        return $this->render('article/updateArticle.html.twig', [
+            'formArticle' => $form->createView()
+        ]);
+    }
+
+
+    /**
+     * @Route("/profil/manage/{name}", name="manage")
+     */
+    public function manageProfile(Request $request, UserPasswordEncoderInterface $encode): Response
+    {
+
+        $entityManager = $this->getDoctrine()->getManager();
+        
+
+        $user = $this->getUser();
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword($encode->encodePassword($user,$user->getPassword()));
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('profil', [
+                'name' => $this->getUser()->getUsername()
+            ]);
+        }
+
+        return $this->render('profil/manage.html.twig', [
+            'formUser' => $form->createView()
         ]);
     }
 }

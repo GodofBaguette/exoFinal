@@ -22,6 +22,7 @@ class ArticleController extends AbstractController
         return $this->render('article/index.html.twig', [
             'articleTitle' => $article->getTitle(),
             'articleContent' => $article->getContent(),
+            'articleId' => $article->getId(),
         ]);
     }
 }

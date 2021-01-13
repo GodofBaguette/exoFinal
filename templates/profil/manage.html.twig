@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ArticleController!{% endblock %}
+
+{% block body %}
+<h1>Update my profil :</h1><br>
+
+{{ form_start(formUser)}}
+
+{{ form_row(formUser.email, {'attr': {'placeholder': "Email"}}) }}
+{{ form_row(formUser.password) }}
+
+
+<button type="submit">Modifier</button>
+
+{{ form_end(formUser)}}
+
+
+{% endblock %}
