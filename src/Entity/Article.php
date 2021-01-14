@@ -33,6 +33,11 @@ class Article
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $report;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +75,18 @@ class Article
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getReport(): ?bool
+    {
+        return $this->report;
+    }
+
+    public function setReport(bool $report): self
+    {
+        $this->report = $report;
 
         return $this;
     }

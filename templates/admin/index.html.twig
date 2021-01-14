@@ -9,6 +9,7 @@
 {% for article in articles %}
 
     <a href="{{ path("id_article", {"id" : article.id}) }}">{{ article.title }} - {{ article.content }}</a><br>
+    <a href="{{ path("report", {"id" : article.id}) }}">REPORT</a><br><br>
 
 {% endfor %}
 

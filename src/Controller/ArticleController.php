@@ -25,4 +25,22 @@ class ArticleController extends AbstractController
             'articleId' => $article->getId(),
         ]);
     }
+
+    /**
+     * @Route("/idarticle/{id}/warning", name="warning")
+     */
+    public function warning(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $article = $entityManager->getRepository(Article::class)->find($id);
+
+        $report = $article->getReport();
+
+        if($report === TRUE){
+            return new Response('Votre article ne correspond à notre charte merci de le modifier');
+        }else{
+            return new Response("Cette article n'a aucun avertissement");
+        }
+    }
 }

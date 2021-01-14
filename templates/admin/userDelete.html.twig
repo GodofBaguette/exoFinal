@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!{% endblock %}
+
+{% block body %}
+
+<h1>ADMIN SPACE</h1>
+
+{% for user in users %}
+
+    <p>{{ user.email }}</p><br>
+    <a href="{{ path("deleteUser", {"id" : user.id, "name" : app.user.username}) }}">DELETE</a>
+    <br>
+
+{% endfor %}
+
+
+{% endblock %}
